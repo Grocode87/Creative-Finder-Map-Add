@@ -1,0 +1,7 @@
+{
+  "name": "cf-map-add",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
