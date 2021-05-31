@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { Router, NavigationExtras } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -9,11 +10,17 @@ import { Router, NavigationExtras } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit  {
+  public maps:any = []
 
-  public maps = [];
-
-
-  constructor(private data: DataService, private router: Router) {
+  
+  constructor(private data: DataService, private router: Router, private http: HttpClient) {
+    this.http.get('http://cgrob10.pythonanywhere.com/get/maps_to_add')
+      .subscribe(data => {
+        this.maps = data;
+        console.log(this.maps);
+       }, error => {
+        console.log(error);
+      });
   }
   ngOnInit() {
   }

@@ -1,43 +1,43 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Maps to add
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            Maps to add
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">
-        Maps to add
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-list *ngIf='getMaps().length > 0'>
-    <ion-card class='map-card' *ngFor="let map of getMaps()" (click)='navigate(map)'>
-      <div class='map-title'>
-        {{ map.name }}
-      </div>
-      <div class='map-desc'>
-        {{ map.desc }}
-      </div>
-      <div class='map-creator'>
-        {{map.creator}}
-      </div>
-      <div class='map-cats'>
-        <div class='cat' *ngFor='let category of map.categories'>
-          {{ category }}
-        </div>
-      </div>
-    </ion-card>
-  </ion-list>
-  <div class='nope-msg' *ngIf='getMaps().length <= 0'>
-    Nothin new lucky u
-  </div>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">
+                Maps to add
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-list *ngIf='getMaps().length > 0'>
+        <ion-card class='map-card' *ngFor="let map of (maps | async)" (click)='navigate(map)'>
+            <div class='map-title'>
+                {{ map.name }}
+            </div>
+            <div class='map-desc'>
+                {{ map.desc }}
+            </div>
+            <div class='map-creator'>
+                {{map.creator}}
+            </div>
+            <div class='map-cats'>
+                <div class='cat' *ngFor='let category of map.categories'>
+                    {{ category }}
+                </div>
+            </div>
+        </ion-card>
+    </ion-list>
+    <div class='nope-msg' *ngIf='getMaps().length <= 0'>
+        Nothin new lucky u
+    </div>
 </ion-content>

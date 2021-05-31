@@ -9,10 +9,11 @@ export class DataService {
   public maps:any = []
 
   constructor(private http: HttpClient) {
-    this.loadMaps(); 
+    
   }
 
   loadMaps() {
+    console.log("loading maps")
     this.http.get('http://cgrob10.pythonanywhere.com/get/maps_to_add')
       .subscribe(data => {
         this.maps = data;
