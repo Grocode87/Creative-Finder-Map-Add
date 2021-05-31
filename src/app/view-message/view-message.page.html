@@ -1,29 +1,43 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons>
-      <ion-back-button [text]="getBackButtonText()" defaultHref="/"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons>
+            <ion-back-button text="Back" defaultHref="/"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="message">
-  <ion-item>
-    <ion-icon name="person-circle" color="primary"></ion-icon>
-    <ion-label class="ion-text-wrap">
-      <h2>
-        {{ message.fromName }}
-        <span class="date">
-          <ion-note>{{ message.date }}</ion-note>
-        </span>
-      </h2>
-      <h3>To: <ion-note>Me</ion-note></h3>
-    </ion-label>
-  </ion-item>
-  
-  <div class="ion-padding">
-    <h1>{{ message.subject }}</h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-  </div>
+<ion-content class="ion-padding" [fullscreen]="true">
+
+    <div>
+        <div class='img_wrapper' *ngFor='let img_url of mapData.img_urls'>
+            <img class='map-img' [src]='img_url'>
+        </div>
+        <div class='name'>{{mapData.name}}</div>
+        <div class='desc'>{{mapData.desc}}</div>
+        <div class='creator'>{{mapData.creator}}</div>
+        <div class='code'>{{mapData.code}}</div>
+
+        <div class='categories'>
+            <div class='title'>Categories</div>
+            <div class="type-wrapper">
+                <div class='type-list' *ngIf="addedTypes.length > 0">
+                    <div class='type' *ngFor='let type of addedTypes'>
+                        {{type}}
+                        <ion-icon name='close' (click)='removeType(type)'></ion-icon>
+                    </div>
+                </div>
+
+                <div class='add-type' (click)="selectCategories()">
+                    Add Category
+                    <ion-icon name='add'></ion-icon>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='actions'>
+        <ion-button (click)='addMap()' color="success">Yes</ion-button>
+        <ion-button (click)='removeMap()' color="danger">No</ion-button>
+    </div>
 </ion-content>

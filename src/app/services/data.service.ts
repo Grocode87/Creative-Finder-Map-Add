@@ -1,83 +1,75 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-export interface Message {
-  fromName: string;
-  subject: string;
-  date: string;
-  id: number;
-  read: boolean;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  public messages: Message[] = [
-    {
-      fromName: 'Matt Chorsey',
-      subject: 'New event: Trip to Vegas',
-      date: '9:32 AM',
-      id: 0,
-      read: false
-    },
-    {
-      fromName: 'Lauren Ruthford',
-      subject: 'Long time no chat',
-      date: '6:12 AM',
-      id: 1,
-      read: false
-    },
-    {
-      fromName: 'Jordan Firth',
-      subject: 'Report Results',
-      date: '4:55 AM',
-      id: 2,
-      read: false
-    },
-    {
-      fromName: 'Bill Thomas',
-      subject: 'The situation',
-      date: 'Yesterday',
-      id: 3,
-      read: false
-    },
-    {
-      fromName: 'Joanne Pollan',
-      subject: 'Updated invitation: Swim lessons',
-      date: 'Yesterday',
-      id: 4,
-      read: false
-    },
-    {
-      fromName: 'Andrea Cornerston',
-      subject: 'Last minute ask',
-      date: 'Yesterday',
-      id: 5,
-      read: false
-    },
-    {
-      fromName: 'Moe Chamont',
-      subject: 'Family Calendar - Version 1',
-      date: 'Last Week',
-      id: 6,
-      read: false
-    },
-    {
-      fromName: 'Kelly Richardson',
-      subject: 'Placeholder Headhots',
-      date: 'Last Week',
-      id: 7,
-      read: false
-    }
-  ];
+  public maps:any = []
 
-  constructor() { }
-
-  public getMessages(): Message[] {
-    return this.messages;
+  constructor(private http: HttpClient) {
+    this.loadMaps(); 
   }
 
-  public getMessageById(id: number): Message {
-    return this.messages[id];
+  loadMaps() {
+    this.http.get('http://cgrob10.pythonanywhere.com/get/maps_to_add')
+      .subscribe(data => {
+        this.maps = data;
+        console.log(this.maps);
+       }, error => {
+        console.log(error);
+      });
+  }
+
+  addMapToDB(id, code, name, desc, creator, types, imgs, videoId) {
+    const requestOptions = {
+      header: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin' : '*',
+        Authorization: '',
+      })
+    };
+
+    const postData = {
+            // tslint:disable:object-literal-shorthand
+            id: id,
+            name: name,
+            code: code,
+            desc: desc,
+            creator: creator,
+            types: types,
+            imgs: imgs,
+            video_id: videoId
+    };
+
+    return new Promise((resolve, reject) => {
+      this.http.post('http://cgrob10.pythonanywhere.com/add/map_to_add', postData, {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+      .subscribe(data => {
+        console.log(data);
+        resolve(data);
+       }, error => {
+        console.log(error);
+        reject(error);
+      });
+    });
+  }
+
+  deleteMap() {
+
+  }
+
+  public getMaps() {
+    return this.maps;
+  }
+
+  public removeMap(map) {
+    this.maps = this.maps.filter(i => i !== map);
+    // TODO: Call function to remove map from database
   }
 }

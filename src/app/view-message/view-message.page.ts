@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DataService, Message } from '../services/data.service';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { DataService } from '../services/data.service';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-view-message',
@@ -8,21 +9,102 @@ import { DataService, Message } from '../services/data.service';
   styleUrls: ['./view-message.page.scss'],
 })
 export class ViewMessagePage implements OnInit {
-  public message: Message;
+  private mapData;
+
+  addedTypes: any = [];
+  categories: any = ['The Block', 'PVP', 'Hide-N-Seek', 'Mini-Games', 'Obstacle Course', 'Race', 'Training', 'Remake', 'Explore', 'Escape', 'Music', 'Other'];
+  cSelected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   constructor(
     private data: DataService,
-    private activatedRoute: ActivatedRoute
-  ) { }
-
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.message = this.data.getMessageById(parseInt(id, 10));
+    private route: ActivatedRoute,
+    private router: Router,
+    private alertCtrl: AlertController,
+    private navCtrl: NavController
+  ) {
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.mapData = this.router.getCurrentNavigation().extras.state.map;
+        console.log(this.mapData);
+        this.addedTypes = this.mapData.categories;
+      }
+    });
   }
 
-  getBackButtonText() {
-    const win = window as any;
-    const mode = win && win.Ionic && win.Ionic.mode;
-    return mode === 'ios' ? 'Inbox' : '';
+  ngOnInit() {}
+
+  async selectCategories(ev: any) {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Select Categories',
+      inputs: this.createInputs(),
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Okay',
+          handler: data => {
+            console.log('Checkbox data:', data);
+            this.addedTypes = data;
+        }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  removeType(type) {
+    const index = this.addedTypes.indexOf(type, 0);
+    if (index > -1) {
+        this.addedTypes.splice(index, 1);
+    }
+  }
+
+  createInputs() {
+    const theNewInputs = [];
+
+    for (const index of Object.keys(this.categories)) {
+      let isChecked = false;
+
+      if (this.addedTypes.includes(this.categories[index])) {
+        isChecked = true;
+      }
+
+      theNewInputs.push(
+        {
+          type: 'checkbox',
+          label: this.categories[index],
+          value: this.categories[index],
+          checked: isChecked
+        }
+      );
+    }
+    return theNewInputs;
+  }
+
+  addMap() {
+    // const navigationExtras: NavigationExtras = { routerDirection: 'back'};
+    // this.router.navigate(['/'], navigationExtras);
+    this.data.addMapToDB(this.mapData.id,
+                         this.mapData.code,
+                         this.mapData.name,
+                         this.mapData.desc,
+                         this.mapData.creator,
+                         this.mapData.categories,
+                         this.mapData.img_urls,
+                         this.mapData.video_id)
+        .then(data => {
+          console.log(data);
+        }).catch(error => {
+          console.log(error);
+        });
+    this.data.removeMap(this.mapData);
+    this.navCtrl.navigateBack('/');
+  }
+
+  removeMap() {
+    
   }
 }
+
