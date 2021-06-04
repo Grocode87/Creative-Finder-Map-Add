@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CF Maps</string>
+    <string name="title_activity_main">CF Map Add</string>
+    <string name="package_name">me.colin.creativefinderdev</string>
+    <string name="custom_url_scheme">me.colin.creativefinderdev</string>
+</resources>

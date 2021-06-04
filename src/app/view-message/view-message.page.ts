@@ -24,8 +24,7 @@ export class ViewMessagePage implements OnInit {
   ) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
-        this.mapData = this.router.getCurrentNavigation().extras.state.map;
-        console.log(this.mapData);
+        this.mapData = JSON.parse(this.router.getCurrentNavigation().extras.state.map)
         this.addedTypes = this.mapData.categories;
       }
     });
@@ -95,16 +94,15 @@ export class ViewMessagePage implements OnInit {
                          this.mapData.img_urls,
                          this.mapData.video_id)
         .then(data => {
-          console.log(data);
         }).catch(error => {
-          console.log(error);
         });
     this.data.removeMap(this.mapData);
     this.navCtrl.navigateBack('/');
   }
 
   removeMap() {
-    
+    this.data.removeMap(this.mapData)
+    this.navCtrl.navigateBack('/');
   }
 }
 

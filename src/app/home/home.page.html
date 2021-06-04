@@ -19,8 +19,12 @@
         </ion-toolbar>
     </ion-header>
 
-    <ion-list *ngIf='getMaps().length > 0'>
-        <ion-card class='map-card' *ngFor="let map of (maps | async)" (click)='navigate(map)'>
+    <div class='loading-container' *ngIf='!data.loaded && getMaps().length == 0'>
+        <ion-spinner></ion-spinner>
+    </div>
+
+    <ion-list *ngIf='data.loaded && getMaps().length > 0'>
+        <ion-card class='map-card' *ngFor="let map of getMaps()" (click)='navigate(map)' style="border-radius: 10px;">
             <div class='map-title'>
                 {{ map.name }}
             </div>
@@ -37,7 +41,7 @@
             </div>
         </ion-card>
     </ion-list>
-    <div class='nope-msg' *ngIf='getMaps().length <= 0'>
+    <div class='nope-msg' *ngIf='data.loaded && getMaps().length <= 0'>
         Nothin new lucky u
     </div>
 </ion-content>

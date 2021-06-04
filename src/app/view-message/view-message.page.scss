@@ -1,9 +1,11 @@
 .categories {
-  background-color: rgb(49, 49, 49);
-  border-radius: 5px;
+  background-color: 'white';
+  box-shadow: 3px 3px 10px 0px rgba(173,173,173,1);
+  border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+
   .type-wrapper {
     padding-top: 5px;
     .type-list {
@@ -27,4 +29,31 @@
         }
     }
   }
+}
+
+.name {
+    font-size: 22px;
+    font-weight: bold;
+
+    padding-bottom: 10px;
+}
+
+.desc {
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+
+.creator {
+    font-size: 16px;
+    padding-bottom: 5px;
+
+}
+.code {
+    font-size: 16px;
+    padding-bottom: 20px;
+}
+
+.actions {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
